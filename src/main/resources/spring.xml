@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context" 
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx" 
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+        http://www.springframework.org/schema/tx 
+        http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd"> 
+        
+        <!-- 配置注解扫描器 -->
+        <context:component-scan base-package="com.mazhicheng"/>
+        
+        <!-- 配置数据库连接池 -->
+       <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+       			 <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+        		<property name="url" value="jdbc:mysql:///ssm_cms_jrtt"></property>
+        		<property name="username" value="root"></property>
+        		<property name="password" value="123"></property>
+        </bean>
+        
+        <!-- 配置SqlsessionFactory -->
+        <bean id="SqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        	<property name="dataSource" ref="dataSource"></property>
+        	<property name="configLocation" value="classpath:mybatis.xml"></property>
+        </bean>
+        
+        <!-- 配置事物 -->
+        <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+      	 	<property name="dataSource" ref="dataSource"></property>
+        </bean>
+        
+        <!-- 配置事务通知 -->
+        
+        <tx:advice transaction-manager="transactionManager" id="myAdvice">
+        	<tx:attributes>
+        		<tx:method name="get*" read-only="true"/>
+        		<tx:method name="*" propagation="REQUIRED"/>
+        	</tx:attributes>
+        </tx:advice>
+        <!-- 配置切点 -->
+        <aop:config>
+        	<aop:pointcut expression="execution(* com.mazhicheng.service.*.*(..))" id="pc"/>
+        	<aop:advisor advice-ref="myAdvice" pointcut-ref="pc"/>
+        </aop:config>
+        
+        <!-- 加载mybatis映射文件 -->
+        
+        <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        	<property name="basePackage" value="com.mazhicheng.mapper"></property>
+        </bean>
+        
+        
+</beans>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mazhicheng.mapper.TermMapper">
+			
+			<insert id="testinsert" useGeneratedKeys="true" keyProperty="id"> 
+			
+				insert into cms_term set unique_name=#{uniqueName}
+				
+			</insert>
+			
+			<select id="seltermid" resultType="com.mazhicheng.bean.Term">
+				select * from cms_term where unique_name=#{uniqueTerm}
+			</select>
+			
+			<insert id="addartterm">
+					insert into cms_article_term set aid=#{id},tid=#{id2}
+			</insert>	
+</mapper>

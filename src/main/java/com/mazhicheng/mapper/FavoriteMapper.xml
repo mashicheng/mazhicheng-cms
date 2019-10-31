@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mazhicheng.mapper.FavoriteMapper">
+				
+				<resultMap type="com.mazhicheng.bean.Favorite" id="favorite">
+					<id column="id" property="id"/>
+					<result column="text" property="text"/>
+					<result column="url" property="url"/>
+					<result column="user_id" property="userId"/>
+					<result column="created" property="created"/>
+				</resultMap>
+				
+				<select id="selScang" resultMap="favorite">
+						select * from cms_favorite where user_id=#{id}
+				</select>
+				
+				<insert id="addfavorites">
+				
+					insert into cms_favorite set text=#{text},url=#{url},created=#{created},user_id=#{userId}
+				</insert>
+				
+				
+				
+				
+				
+				
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mazhicheng.mapper.SpecialMapper">
+			<resultMap type="com.mazhicheng.bean.Special" id="special">
+				<id column="id"  property="id" jdbcType="INTEGER"/>
+				<result column="title" property="title" jdbcType="VARCHAR"/>
+				<result column="abstract" property="abstrac" jdbcType="VARCHAR"/>
+				<result column="created" property="created" jdbcType="TIMESTAMP"/>
+				<collection property="article" ofType="com.mazhicheng.bean.Article">
+					<id column="id1" property="id" jdbcType="INTEGER" />
+					<result column="title1" property="title" jdbcType="VARCHAR" />
+					<result column="picture" property="picture" jdbcType="VARCHAR" />
+					<result column="channel_id" property="channelId" jdbcType="INTEGER" />
+					<result column="category_id" property="categoryId" jdbcType="INTEGER" />
+					<result column="user_id" property="userId" jdbcType="INTEGER" />
+					<result column="hits" property="hits" jdbcType="INTEGER" />
+					<result column="hot" property="hot" jdbcType="INTEGER" />
+					<result column="status" property="status" jdbcType="INTEGER" />
+					<result column="deleted" property="deleted" jdbcType="INTEGER" />
+					<result column="created1" property="created" jdbcType="TIMESTAMP" />
+					<result column="updated" property="updated" jdbcType="TIMESTAMP" />
+				</collection>
+			</resultMap>
+			
+			<select id="selspecial" resultType="map">
+					select a.*,count(b.sid) count  from cms_special a LEFT JOIN cms_special_article b on a.id=b.sid GROUP BY a.id
+			</select>
+			
+			<select id="selsparticle" resultMap="special">
+			
+					select a.*,c.id id1,c.title title1,c.created created1 from cms_special a LEFT JOIN cms_special_article b on a.id=b.sid LEFT JOIN cms_article c on c.id=b.aid where a.id=#{id}			
+			
+			</select>
+			
+			<insert id="addspart">
+			
+				insert into cms_special_article set sid=#{id},aid=#{text}
+			
+			</insert>
+			
+			<select id="selsp" resultMap="special">
+			
+				select a.*,c.id id1,c.title title1,c.created created1 from cms_special a LEFT JOIN cms_special_article b on a.id=b.sid LEFT JOIN cms_article c on c.id=b.aid order by a.created	desc
+			
+			
+			</select>
+			
+			<insert id="insertspe">
+			
+					insert into cms_special set title=#{title},abstract=#{abstrac},created=#{created}
+				
+			</insert>
+			
+			<select id="updatehx" resultMap="special">
+				
+				select * from cms_special where id=#{id}
+			
+			</select>
+			
+			<update id="updatespe">
+			
+				update cms_special set title=#{title},abstract=#{abstrac} where id=#{id}
+			
+			</update>
+
+</mapper>
